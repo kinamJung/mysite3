@@ -10,19 +10,19 @@
 		
 		<c:choose>
 			<c:when test="${param.menu eq 'main'}">
-				<li class="selected"><a href="${pageContext.request.contextPath}">정기남</a></li>
-				<li><a href="${pageContext.request.contextPath}/gs">방명록</a></li>
-				<li><a href="${pageContext.request.contextPath}/bs">게시판</a></li>
+				<li class="selected"><a href="${pageContext.request.contextPath}/">정기남</a></li>
+				<li><a href="${pageContext.request.contextPath}/guestbook/">방명록</a></li>
+				<li><a href="${pageContext.request.contextPath}/board/">게시판</a></li>
 			</c:when>
 			<c:when test="${param.menu eq 'guestbook'}">
-				<li ><a href="${pageContext.request.contextPath}/main">정기남</a></li>
-				<li class="selected"><a href="${pageContext.request.contextPath}/gs">방명록</a></li>
-				<li><a href="${pageContext.request.contextPath}/bs">게시판</a></li>
+				<li ><a href="${pageContext.request.contextPath}/">정기남</a></li>
+				<li class="selected"><a href="${pageContext.request.contextPath}/guestbook/">방명록</a></li>
+				<li><a href="${pageContext.request.contextPath}/board/">게시판</a></li>
 			</c:when>
 			<c:when test="${param.menu eq 'board'}">
-				<li ><a href="${pageContext.request.contextPath}/main">정기남</a></li>
-				<li><a href="${pageContext.request.contextPath}/gs">방명록</a></li>
-				<li class="selected"><a href="${pageContext.request.contextPath}/bs">게시판</a></li>
+				<li ><a href="${pageContext.request.contextPath}/">정기남</a></li>
+				<li><a href="${pageContext.request.contextPath}/guestbook/">방명록</a></li>
+				<li class="selected"><a href="${pageContext.request.contextPath}/board/">게시판</a></li>
 			</c:when>
 		</c:choose>
 

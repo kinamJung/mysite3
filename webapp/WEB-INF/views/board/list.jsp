@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <%@ page import="com.hanains.mysite.vo.UserVo"%>
+
 <% 
 	UserVo authUser = (UserVo) session.getAttribute("authUser");
 %>
@@ -22,8 +23,8 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath}/bs" method="post">
-					<input type="hidden" name="a" value="search"> <input
+				<form id="search_form" action="${pageContext.request.contextPath}/board/search" method="post">
+					 <input
 						type="hidden" name="index" value="${param.index }"> <input
 						type="hidden" name="size" value="${size }"> <input
 						type="text" id="kwd" name="search" value="${search}"> <input
@@ -43,13 +44,13 @@
 						<tr>
 							<td>${vo.articleSequence }</td>
 							<td><a
-								href="${pageContext.request.contextPath}/bs?a=boardView&no=${vo.no}&memberNo=${vo.memberNo}">${vo.title}</a>
+								href="${pageContext.request.contextPath}/board/view?no=${vo.no}">${vo.title}</a>
 							</td>
 							<td>${vo.name}</td>
 							<td>${vo.viewCount}</td>
 							<td>${vo.date}</td>
 							<td><c:if test="${ vo.memberNo eq authUser.no }">
-									<a href="${pageContext.request.contextPath}/bs?a=delete&no=${vo.no}" class="del"><font
+									<a href="${pageContext.request.contextPath}/board/delete?no=${vo.no}" class="del"><font
 										color="black">삭제</font></a>
 								</c:if></td>
 						</tr>
@@ -59,7 +60,7 @@
 					<ul>
 						<c:if test="${ index-1 != 0 }">
 							<li class="pg-prev"><a
-								href="${pageContext.request.contextPath}/bs?a=displayPaging&index=${index-1}&size=${size}&search=${search}">◀
+								href="${pageContext.request.contextPath}/board/viewpaging?index=${index-1}&search=${search}">◀
 									이전</a></li>
 
 						</c:if>
@@ -68,7 +69,7 @@
 							<c:choose>
 								<c:when test="${size >= status.count}">
 									<li><a
-										href='${pageContext.request.contextPath}/bs?a=displayPaging&index=${status.index}&size=${size}&search=${search}'>
+										href='${pageContext.request.contextPath}/board/viewpaging?index=${status.index}&search=${search}'>
 											<!-- Color To Paging Index --> <c:choose>
 												<c:when test="${ status.index eq param.index }">
 													<font color="red">${status.index}</font>
@@ -91,7 +92,7 @@
 
 						<c:if test="${ index != size }">
 							<li class="pg-next"><a
-							href="${pageContext.request.contextPath}/bs?a=displayPaging&index=${index+1}&size=${size}&search=${search}">다음
+							href="${pageContext.request.contextPath}/board/viewpaging?index=${index+1}&search=${search}">다음
 								▶</a></li>
 						</c:if>
 						
@@ -99,7 +100,7 @@
 				</div>
 				<c:if test="${ not empty authUser }">
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath}/bs?a=writeForm&no=${authUser.no}" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/writeForm?no=${authUser.no}" id="new-book">글쓰기</a>
 					</div>
 				</c:if>
 

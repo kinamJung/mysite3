@@ -81,5 +81,15 @@ public class BoardVo {
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
+
+
+	@Override
+	public String toString() {
+		return "BoardVo [no=" + no + ", title=" + title + ", content="
+				+ content + ", memberNo=" + memberNo + ", viewCount="
+				+ viewCount + ", regDate=" + regDate + "]";
+	}
+	
+	
 	
 }

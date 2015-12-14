@@ -20,8 +20,7 @@
 		<div id="content">
 			<div id="user">
 				
-				<form id="join-form" name="updateForm" method="post" action="${pageContext.request.contextPath}/user">
-					<input type="hidden" name="a" value="modify">
+				<form id="join-form" name="updateForm" method="post" action="${pageContext.request.contextPath}/user/update">
 					<input type="hidden" name="no" value="${authUser.no}" >
 					
 					<h1>회원정보 수정</h1>

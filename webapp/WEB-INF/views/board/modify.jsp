@@ -17,9 +17,9 @@
 		<c:import url="/WEB-INF/views/include/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.request.contextPath}/bs">
-				<input type="hidden" name="a" value="modify">
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/update">
 				<input type="hidden" name="no" value="${boardVo.no}" >
+				<input type="hidden" name="memberNo" value="${boardVo.memberNo }" >
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>
