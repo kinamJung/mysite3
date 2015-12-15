@@ -2,7 +2,7 @@
 
 						   MySite 구현.
 		   
-		   											정기남
+		   									      정기남
 		   							
   	※ BOARD테이블에서 ORDER_NO, GROUP_NO, DEPTH 칼럼 추가.
   		ALTER TABLE WEBDB.BOARD
