@@ -1,5 +1,7 @@
 package com.hanains.mysite.controller;
 
+import java.util.List;
+
 import javax.sound.midi.Track;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
+
+
 import com.hanains.mysite.service.BoardService;
+import com.hanains.mysite.vo.BoardInfo;
 import com.hanains.mysite.vo.BoardVo;
 import com.hanains.mysite.vo.GuestBookVo;
 
@@ -38,13 +43,13 @@ public class BoardController {
 	}
 	
 	@RequestMapping( value = "/delete", method = RequestMethod.GET) 
-	public String delete(@ModelAttribute GuestBookVo vo){
-		boardService.delete(vo.getNo());
+	public String delete(@ModelAttribute BoardVo vo){
+		boardService.delete(vo);
 		return "redirect:/board/";
 	}
 	
 	@RequestMapping("/writeForm")
-	public String writeForm(@ModelAttribute GuestBookVo vo, Model model){
+	public String writeForm(@ModelAttribute BoardVo vo, Model model){
 		
 		model.addAttribute("no", vo.getNo());
 		return "/board/write";
@@ -71,6 +76,8 @@ public class BoardController {
 		//select board vo
 		BoardVo board = boardService.view(vo);
 		
+		System.out.println(board);
+		
 		model.addAttribute("boardVo", board);
 		return "/board/view";
 		
@@ -90,6 +97,8 @@ public class BoardController {
 		
 		System.out.println(vo);
 		boardService.updateBoard(vo);
+		
+		System.out.println(vo);
 		
 		model.addAttribute("boardVo", vo);
 		return "/board/view";
@@ -111,11 +120,36 @@ public class BoardController {
 							@RequestParam(value="search", required=true, defaultValue="")String keyword,
 							Model model){
 		model = boardService.viewPaging(index, keyword, model);
-		
-		
-		return "/board/list";
-		
+		return "/board/list";		
 	}
+	
+	/*@RequestMapping("/comment")
+	public String comment(@ModelAttribute BoardVo vo, Model model){
+		
+		//답글 리스트 뽑아오기
+		List<BoardVo> list = boardService.getBoardListByGroup(vo.getGroupNo());
+		
+		for(BoardVo t : list){
+			System.out.println(t);
+		}
+		
+		model.addAttribute("groupNo", list.get(0).getGroupNo());
+		model.addAttribute("list", list);
+		
+		return "/board/comment";
+	}*/
+	
+	@RequestMapping("/commentInsert")
+	public String commentInsert(@ModelAttribute BoardVo vo, Model model){
+		
+		System.out.println(vo);
+		
+		boardService.insertComment(vo, model);
+	
+		
+		return "redirect:/board/";
+	}
+	
 	
 }
 

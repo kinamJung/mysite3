@@ -48,7 +48,7 @@
 							</td>
 							<td>${vo.name}</td>
 							<td>${vo.viewCount}</td>
-							<td>${vo.date}</td>
+							<td>${vo.regDate}</td>
 							<td><c:if test="${ vo.memberNo eq authUser.no }">
 									<a href="${pageContext.request.contextPath}/board/delete?no=${vo.no}" class="del"><font
 										color="black">삭제</font></a>

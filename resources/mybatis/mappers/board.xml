@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<insert id="insert" parameterType="BoardVo">
+		<![CDATA[
+			insert into board values ( board_no_seq.nextval, #{title}, #{content}, #{memberNo}, 0, SYSDATE, 1, board_group_no_seq.nextval, 0 )
+		]]>
+
+	</insert>
+
+	<select id="getBoardInfo" parameterType="BoardVo" resultType="BoardVo">
+		<![CDATA[
+		select no, title, content, member_no as memberNo, group_no, order_no, depth 
+		from board 
+		where no=#{no}
+		]]>
+	</select>
+
+	<delete id="delete" parameterType="BoardVo">
+		<![CDATA[
+			delete from board where no = #{no}
+		]]>
+	</delete>
+
+	<update id="update" parameterType="BoardVo">
+		<![CDATA[
+			UPDATE board SET title = #{title}, content = #{content} WHERE no = #{no}
+		]]>
+
+	</update>
+
+	<update id="updateViewCount" parameterType="BoardVo">
+		<![CDATA[
+			update board set view_cnt = view_cnt + 1 where no= #{no}
+		]]>
+	</update>
+
+	<select id="getBoardInfoByPaging" parameterType="map" resultType="BoardInfo">
+		<![CDATA[
+				SELECT *
+		  			FROM (SELECT A.*, ROWNUM AS RNUM, COUNT (*) OVER () AS TOTCNT, COUNT (*) OVER () - ROWNUM +1 as articleSequence
+		          		  FROM (  SELECT a.NO as no,
+				                         a.TITLE as title,
+				                         a.CONTENT as content,
+				                         a.MEMBER_NO as memberNo,
+				                         b.NAME as name,
+				                         a.VIEW_CNT as viewCount,
+				                         a.REG_DATE as regDate,
+										 a.ORDER_NO as orderNo,
+										 a.GROUP_NO as groupNo,
+										 a.DEPTH as depth
+		                    		FROM board a, MEMBER b
+		                   			WHERE a.member_no = b.no
+		                			ORDER BY a.reg_date DESC) A)
+					 WHERE RNUM > #{start} AND RNUM <= #{end}		
+		]]>
+	</select>
+
+	<select id="getBoardListByFagingWithWord" parameterType="map" resultType="BoardInfo">
+		<![CDATA[
+				SELECT *
+		  			FROM (SELECT A.*, ROWNUM AS RNUM, COUNT (*) OVER () AS TOTCNT, COUNT (*) OVER () - ROWNUM +1 as articleSequence
+		          		  FROM (  SELECT a.NO as no,
+				                         a.TITLE as title,
+				                         a.CONTENT as content,
+				                         a.MEMBER_NO as memberNo,
+				                         b.NAME as name,
+				                         a.VIEW_CNT as viewCount,
+				                         a.REG_DATE as regDate,
+										 a.ORDER_NO as orderNo,
+										 a.GROUP_NO as groupNo,
+										 a.DEPTH as depth
+		                    		FROM board a, MEMBER b
+		                   			WHERE a.member_no = b.no AND a.TITLE like #{word} 
+		                			ORDER BY a.reg_date DESC) A)
+					 WHERE RNUM > #{start} AND RNUM <= #{end}		
+		]]>
+	
+	</select>
+
+	<select id="selectBoardCountByLikeWord" parameterType="String" resultType="int">
+		<![CDATA[
+			select count(*) as count from board where title like #{word}
+		]]>	
+	</select>
+
+	<select id="getBoardCount" resultType="int">
+		select count(*) as count from board
+	</select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+

@@ -20,14 +20,14 @@ public class UserService {
 	}
 	
 	public UserVo login(UserVo vo){
-		UserVo authUser=  userDao.get(vo.getEmail(), vo.getPassword());
+		UserVo authUser=  userDao.get(vo);
 		return authUser;
 	}
 	
 	public boolean updatePassword(UserVo vo, String uptPassword){
 		
 		boolean retVal = false;
-		String chkPassword =  userDao.getPassword(vo.getNo());
+		String chkPassword =  userDao.getPassword(vo);
 		
 		//사용자가 입력한 암호가 현재 암호와 같은경우에 바꾸고자 하는 암호가 공백이 아닐경우에만 프로세스 진행
 		if(chkPassword.equals( vo.getPassword() ) == true

@@ -9,8 +9,43 @@ public class BoardVo {
 	private Long viewCount;
 	private String regDate;
 	
+	private Long groupNo;
+	private Long orderNo;
+	private Long depth;
 	
 	
+	
+	
+	public Long getDepth() {
+		return depth;
+	}
+
+
+	public void setDepth(Long depth) {
+		this.depth = depth;
+	}
+
+
+	public Long getGroupNo() {
+		return groupNo;
+	}
+
+
+	public void setGroupNo(Long groupNo) {
+		this.groupNo = groupNo;
+	}
+
+
+	public Long getOrderNo() {
+		return orderNo;
+	}
+
+
+	public void setOrderNo(Long orderNo) {
+		this.orderNo = orderNo;
+	}
+
+
 	public BoardVo() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -87,9 +122,11 @@ public class BoardVo {
 	public String toString() {
 		return "BoardVo [no=" + no + ", title=" + title + ", content="
 				+ content + ", memberNo=" + memberNo + ", viewCount="
-				+ viewCount + ", regDate=" + regDate + "]";
+				+ viewCount + ", regDate=" + regDate + ", groupNo=" + groupNo
+				+ ", orderNo=" + orderNo + ", depth=" + depth + "]";
 	}
-	
+
+
 	
 	
 }

@@ -23,7 +23,10 @@ public class UserController {
 	public String login(HttpSession session , @ModelAttribute UserVo vo){
  
 		UserVo authUser =  userService.login(vo);		
-		System.out.println(authUser);
+		
+		if(authUser == null){
+			return "redirect:/user/login";
+		}
 		session.setAttribute("authUser", authUser);
 		
 		return "redirect:/";

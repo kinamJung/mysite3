@@ -27,6 +27,7 @@ public class BoardService {
 			pagingSize = pagingSize - 1;
 		}
 
+		
 		model.addAttribute("search", "");
 		model.addAttribute("size", pagingSize);
 		model.addAttribute("list", list);
@@ -36,8 +37,8 @@ public class BoardService {
 
 	}
 
-	public void delete(Long no) {
-		dao.deleteBoard(no);
+	public void delete(BoardVo vo) {
+		dao.deleteBoard(vo);
 	}
 
 	public void insert(BoardVo vo) {
@@ -46,11 +47,11 @@ public class BoardService {
 	}
 
 	public void updateView(BoardVo vo) {
-		dao.updateViewCount(vo.getNo());
+		dao.updateViewCount(vo);
 	}
 
 	public BoardVo view(BoardVo vo) {
-		BoardVo board = dao.getBoardVo(vo.getNo());
+		BoardVo board = dao.getBoardVo(vo);
 		return board;
 	}
 
@@ -58,6 +59,12 @@ public class BoardService {
 		dao.updateBoard(vo);
 	}
 
+/*	public List<BoardVo> getBoardListByGroup(Long group){
+		
+		List<BoardVo> list = dao.getListByGroup(group);
+		return list;
+	}*/
+	
 	public Model search(String keyword, Model model) {
 
 		int pagingIndex = 1; // 현재 페이지를 가리킬 변수
@@ -127,5 +134,13 @@ public class BoardService {
 		
 		return model;
 	}
-
+	
+	//트랜잭션 필요할거 같네
+	public boolean insertComment(BoardVo vo, Model model){
+		
+		
+		
+		return false;
+	}
+	
 }
