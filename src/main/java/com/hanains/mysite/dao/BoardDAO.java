@@ -26,6 +26,23 @@ public class BoardDAO {
 		return count;
 	}
 
+	
+	
+	//Get OrderMaxNo By GroupNo
+	public long getOrderMaxNoByGroupNo(long no){
+	
+		long count = sqlSession.selectOne("board.getOrderMaxNoByGroupNo", no);
+		return count;
+	}
+	
+	
+	//update OrderNo and Depth
+	
+	public void updateOrderNoAndDepth(BoardVo vo){
+		sqlSession.update("board.updateOrderNoAndDepth",vo);
+	}
+	
+	
 	// Get Board_INFO Count
 	public int getBoardCount() {
 
@@ -37,6 +54,11 @@ public class BoardDAO {
 	public void updateBoard(BoardVo vo) {
 		sqlSession.update("board.update", vo);
 
+	}
+	
+	public Long getGroupMaxValue(){
+		Long maxValue = sqlSession.selectOne("board.getGroupMaxValue");
+		return maxValue;
 	}
 
 	// Delete Board_INFO
@@ -71,7 +93,6 @@ public class BoardDAO {
 		map.put("word", "%" + word + "%");
 		map.put("start", (pagingCount - 1) * displayArticleCount);
 		map.put("end",pagingCount * displayArticleCount );
-		
 		
 		List<BoardInfo> list = sqlSession.selectList("board.getBoardListByFagingWithWord", map);
 		

@@ -5,14 +5,37 @@
 
 	<insert id="insert" parameterType="BoardVo">
 		<![CDATA[
-			insert into board values ( board_no_seq.nextval, #{title}, #{content}, #{memberNo}, 0, SYSDATE, 1, board_group_no_seq.nextval, 0 )
+			insert into board values ( board_no_seq.nextval, #{title}, #{content}, #{memberNo}, 0, SYSDATE, #{orderNo}, #{groupNo}, #{depth} )
 		]]>
-
 	</insert>
+	
+	<select id="getGroupMaxValue" resultType="long" >
+		<![CDATA[
+			select max(group_no) as max from board
+		]]>
+	
+	</select>
+	
+	
+	<update id="updateOrderNoAndDepth" parameterType="BoardVo" >
+		<![CDATA[
+			update board 
+			set order_no = order_no + 1 , depth = depth+1
+			where group_no = #{groupNo} and order_no >=  #{orderNo}
+		]]>
+	
+	</update>
+
+	<select id="getOrderMaxNoByGroupNo" resultType="long" parameterType="long">
+		<![CDATA[
+			select max(order_no) from board where group_no = #{no}
+		]]>
+		
+	</select>
 
 	<select id="getBoardInfo" parameterType="BoardVo" resultType="BoardVo">
 		<![CDATA[
-		select no, title, content, member_no as memberNo, group_no, order_no, depth 
+		select no, title, content, member_no as memberNo, group_no as groupNo, order_no as orderNo, depth 
 		from board 
 		where no=#{no}
 		]]>
@@ -53,7 +76,7 @@
 										 a.DEPTH as depth
 		                    		FROM board a, MEMBER b
 		                   			WHERE a.member_no = b.no
-		                			ORDER BY a.reg_date DESC) A)
+		                			ORDER BY a.group_no DESC, a.order_no asc) A)
 					 WHERE RNUM > #{start} AND RNUM <= #{end}		
 		]]>
 	</select>
@@ -73,8 +96,8 @@
 										 a.GROUP_NO as groupNo,
 										 a.DEPTH as depth
 		                    		FROM board a, MEMBER b
-		                   			WHERE a.member_no = b.no AND a.TITLE like #{word} 
-		                			ORDER BY a.reg_date DESC) A)
+		                   			WHERE a.member_no = b.no AND (a.TITLE like #{word} OR a.content like #{word} OR b.name like #{word} )
+		                			ORDER BY a.group_no DESC, a.order_no asc) A)
 					 WHERE RNUM > #{start} AND RNUM <= #{end}		
 		]]>
 	

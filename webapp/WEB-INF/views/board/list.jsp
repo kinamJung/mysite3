@@ -43,8 +43,11 @@
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<tr>
 							<td>${vo.articleSequence }</td>
-							<td><a
-								href="${pageContext.request.contextPath}/board/view?no=${vo.no}">${vo.title}</a>
+							<td class="title" style="padding-left:${( vo.depth - 1 )*10 }px">
+								<c:if test="${vo.depth > 1 }">
+									<img src="${pageContext.request.contextPath }/assets/images/ico-reply.gif">
+								</c:if>							
+								<a href="${pageContext.request.contextPath}/board/view?no=${vo.no}">${vo.title}</a>
 							</td>
 							<td>${vo.name}</td>
 							<td>${vo.viewCount}</td>
@@ -100,7 +103,7 @@
 				</div>
 				<c:if test="${ not empty authUser }">
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath}/board/writeForm?no=${authUser.no}" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/writeForm?no=${authUser.no}&groupNo=0&orderNo=0&depth=0" id="new-book">글쓰기</a>
 					</div>
 				</c:if>
 

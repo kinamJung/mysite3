@@ -14,8 +14,6 @@ public class BoardVo {
 	private Long depth;
 	
 	
-	
-	
 	public Long getDepth() {
 		return depth;
 	}

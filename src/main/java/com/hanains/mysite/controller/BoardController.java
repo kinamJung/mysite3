@@ -1,12 +1,7 @@
 package com.hanains.mysite.controller;
 
-import java.util.List;
-
-import javax.sound.midi.Track;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +31,6 @@ public class BoardController {
 	@RequestMapping("/")
 	public String list(Model model){
 		
-		
 		model = boardService.list(model);
 		
 		return "/board/list";
@@ -51,14 +45,15 @@ public class BoardController {
 	@RequestMapping("/writeForm")
 	public String writeForm(@ModelAttribute BoardVo vo, Model model){
 		
-		model.addAttribute("no", vo.getNo());
+		model.addAttribute("board", vo);
+		
 		return "/board/write";
 	}
 	
 	@RequestMapping("/write")
 	public String write(@ModelAttribute BoardVo vo){
 		
-		System.out.println(vo);
+		System.out.println("write : " + vo);
 		
 		boardService.insert(vo);
 		
@@ -123,21 +118,6 @@ public class BoardController {
 		return "/board/list";		
 	}
 	
-	/*@RequestMapping("/comment")
-	public String comment(@ModelAttribute BoardVo vo, Model model){
-		
-		//답글 리스트 뽑아오기
-		List<BoardVo> list = boardService.getBoardListByGroup(vo.getGroupNo());
-		
-		for(BoardVo t : list){
-			System.out.println(t);
-		}
-		
-		model.addAttribute("groupNo", list.get(0).getGroupNo());
-		model.addAttribute("list", list);
-		
-		return "/board/comment";
-	}*/
 	
 	@RequestMapping("/commentInsert")
 	public String commentInsert(@ModelAttribute BoardVo vo, Model model){

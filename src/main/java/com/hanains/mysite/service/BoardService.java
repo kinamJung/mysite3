@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.hanains.mysite.dao.BoardDAO;
@@ -26,7 +27,6 @@ public class BoardService {
 		if (tempSize % Common.SHOW_BOARD_WRITHING_COUNT_ON_PAGE == 0) {
 			pagingSize = pagingSize - 1;
 		}
-
 		
 		model.addAttribute("search", "");
 		model.addAttribute("size", pagingSize);
@@ -40,10 +40,37 @@ public class BoardService {
 	public void delete(BoardVo vo) {
 		dao.deleteBoard(vo);
 	}
-
+	
 	public void insert(BoardVo vo) {
 
-		dao.insert(vo);
+		//새글인 경우 
+		if( vo.getGroupNo() == 0 &&
+				vo.getOrderNo() == 0 && vo.getDepth() == 0){
+			long maxValue = 0;
+			int boardCount = dao.getBoardCount();
+			if( boardCount == 0 ){
+				maxValue = 0;
+			}else{
+				maxValue = dao.getGroupMaxValue();
+			}
+			
+			vo.setGroupNo(maxValue+1);
+			vo.setOrderNo(vo.getOrderNo()+1);
+			vo.setDepth(vo.getDepth()+1);
+			
+			dao.insert(vo);
+		}else{ // 코멘트인 경우
+		
+			long tempOrderNo = dao.getOrderMaxNoByGroupNo(vo.getGroupNo());
+			vo.setOrderNo(vo.getOrderNo()+1); // 부모글에 orderNo와 depth 1증가
+			vo.setDepth(vo.getDepth()+1);
+			if( vo.getOrderNo() <= tempOrderNo ){
+				dao.updateOrderNoAndDepth(vo); // 1단계 증가
+			}
+			//해당 위치에 글 삽입.
+			dao.insert(vo);			
+		}
+		
 	}
 
 	public void updateView(BoardVo vo) {
