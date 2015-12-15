@@ -85,12 +85,6 @@ public class BoardService {
 	public void updateBoard(BoardVo vo) {
 		dao.updateBoard(vo);
 	}
-
-/*	public List<BoardVo> getBoardListByGroup(Long group){
-		
-		List<BoardVo> list = dao.getListByGroup(group);
-		return list;
-	}*/
 	
 	public Model search(String keyword, Model model) {
 

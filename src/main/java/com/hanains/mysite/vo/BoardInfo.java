@@ -8,7 +8,7 @@ public class BoardInfo {
 	private String name;
 	private Long viewCount;
 	private String regDate;
-	private int articleSequence;
+	private int articleSequence;   // View에서 순서를 표시하기 위한 변수.
 
 	private Long groupNo;
 	private Long orderNo;
