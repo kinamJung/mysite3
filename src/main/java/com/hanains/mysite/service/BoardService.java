@@ -24,6 +24,8 @@ public class BoardService {
 	@Autowired
 	private BoardDAO dao;
 
+	private static final int BLOCK_SIZE = 5;
+
 	public Model list(Model model) {
 
 		List<BoardInfo> list = dao.getListByFaging(1,
@@ -39,6 +41,13 @@ public class BoardService {
 		model.addAttribute("list", list);
 		model.addAttribute("index", 1);
 
+		int endPage = (1 + BLOCK_SIZE) - 1;
+		model.addAttribute("startpage", 1);
+		model.addAttribute("endpage", endPage);
+
+		System.out.println("[info]size: " + pagingSize);
+		System.out.println("[info]startpage:" + 1);
+		System.out.println("[info]endpage: " + endPage);
 		return model;
 
 	}
@@ -50,9 +59,9 @@ public class BoardService {
 	@Transactional
 	public void insert(BoardVo vo, MultipartFile multipartFile[]) {
 
-		//새글에 추가될  no
+		// 새글에 추가될 no
 		Long no = 0L;
-		
+
 		// 새글인 경우
 		if (vo.getGroupNo() == 0 && vo.getOrderNo() == 0 && vo.getDepth() == 0) {
 			long maxValue = 0;
@@ -79,8 +88,7 @@ public class BoardService {
 			// 해당 위치에 글 삽입.
 			no = dao.insert(vo);
 		}
-		
-		
+
 		// 첨부파일 처리
 		for (MultipartFile multiFile : multipartFile) {
 
@@ -143,50 +151,18 @@ public class BoardService {
 
 	public Map<String, Object> view(BoardVo vo) {
 		BoardVo board = dao.getBoardVo(vo);
-		List<UploadFileVo> uploadfileList = dao.getUploadFileListByBoardNo(vo.getNo());
-		
+		List<UploadFileVo> uploadfileList = dao.getUploadFileListByBoardNo(vo
+				.getNo());
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("board", board);
-		map.put("uploadFile",uploadfileList);
-		
+		map.put("uploadFile", uploadfileList);
+
 		return map;
 	}
 
 	public void updateBoard(BoardVo vo) {
 		dao.updateBoard(vo);
-	}
-
-	public Model search(String keyword, Model model) {
-
-		int pagingIndex = 1; // 현재 페이지를 가리킬 변수
-		List<BoardInfo> list = null;
-
-		// 한 페이지에 보이는 게시글 수
-		int onePagingShowBoard = -1;
-		int boaodCount = 0; // 필터링된 board 총 개수
-		if (keyword.equals("")) {
-			System.out.println("[info]SearchAction...equals");
-			list = dao.getListByFaging(pagingIndex,
-					Common.SHOW_BOARD_WRITHING_COUNT_ON_PAGE);
-			boaodCount = dao.getBoardCount();
-			onePagingShowBoard = (boaodCount / Common.SHOW_BOARD_WRITHING_COUNT_ON_PAGE) + 1;
-		} else {
-			list = dao.getListByFaging(pagingIndex,
-					Common.SHOW_BOARD_WRITHING_COUNT_ON_PAGE, keyword);
-			boaodCount = dao.getBoardCount(keyword);
-			onePagingShowBoard = (boaodCount / Common.SHOW_BOARD_WRITHING_COUNT_ON_PAGE) + 1;
-		}
-
-		if (boaodCount % Common.SHOW_BOARD_WRITHING_COUNT_ON_PAGE == 0) {
-			onePagingShowBoard = onePagingShowBoard - 1;
-		}
-
-		model.addAttribute("search", keyword);
-		model.addAttribute("list", list);
-		model.addAttribute("size", onePagingShowBoard);
-		model.addAttribute("index", pagingIndex);
-
-		return model;
 	}
 
 	public Model viewPaging(int index, String keyword, Model model) {
@@ -220,6 +196,19 @@ public class BoardService {
 		model.addAttribute("search", keyword);
 		model.addAttribute("size", paging);
 		model.addAttribute("list", list);
+
+		// 해당 인덱스가 존재하는 처음페이지와 끝페이지를 구함.
+		int temp = (index / BLOCK_SIZE);
+
+		if (index % (BLOCK_SIZE) == 0) {
+			temp = temp - 1;
+		}
+
+		int startPage = (temp * BLOCK_SIZE) + 1;
+		int endPage = startPage + BLOCK_SIZE - 1;
+
+		model.addAttribute("startpage", startPage);
+		model.addAttribute("endpage", endPage);
 
 		return model;
 	}

@@ -49,6 +49,7 @@ public class UserController {
 		map.put("message", null); // 실패시 실패 메세지 
 		map.put("data", vo == null ); // vo가 없으면 사용가능한 이메일
 		
+		System.out.println("/checkmail : " + map);
 		return map;
 	}
 	

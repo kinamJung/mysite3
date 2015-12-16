@@ -84,7 +84,6 @@ public class BoardController {
 	
 	public String boardView(@ModelAttribute BoardVo vo, Model model){
 		
-		System.out.println(vo);
 		//update view Count
 		boardService.updateView(vo);
 		
@@ -111,7 +110,12 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/modifyform")
-	public String modifyForm(@ModelAttribute BoardVo vo, Model model){
+	public String modifyForm(@ModelAttribute BoardVo vo, Model model, HttpSession session){
+		
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null){
+			return "redirect:/user/loginform";
+		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map = boardService.view(vo);
@@ -126,7 +130,6 @@ public class BoardController {
 	@RequestMapping("/update")
 	public String update(@ModelAttribute BoardVo vo, Model model){
 		
-		System.out.println(vo);
 		boardService.updateBoard(vo);
 		
 		System.out.println(vo);
@@ -135,16 +138,6 @@ public class BoardController {
 		return "/board/view";
 		
 	}
-	
-	@RequestMapping("/search")
-	public String search(@RequestParam(value="search", required=true, defaultValue="" ) String keyword,
-						 Model model){
-		
-		model = boardService.search(keyword, model);
-		
-		return "/board/list";
-	}
-	
 	@RequestMapping("/viewpaging")
 	public String viewPaging(@RequestParam(value="index", required=true, defaultValue="1")int index,
 							

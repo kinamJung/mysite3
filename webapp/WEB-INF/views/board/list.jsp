@@ -23,12 +23,11 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath}/board/search" method="post">
-					 <input
-						type="hidden" name="index" value="${param.index }"> <input
-						type="hidden" name="size" value="${size }"> <input
-						type="text" id="kwd" name="search" value="${search}"> <input
-						type="submit" value="찾기">
+				<form id="search_form" action="${pageContext.request.contextPath}/board/viewpaging" method="get">
+					 <input type="hidden" name="index" value="1"> 
+					 <input type="hidden" name="size" value="${size }"> 
+					 <input type="text" id="kwd" name="search" value="${search}"> 
+					 <input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
 					<tr>
@@ -53,52 +52,49 @@
 							<td>${vo.viewCount}</td>
 							<td>${vo.regDate}</td>
 							<td><c:if test="${ vo.memberNo eq authUser.no }">
-									<a href="${pageContext.request.contextPath}/board/delete?no=${vo.no}" class="del"><font
-										color="black">삭제</font></a>
-								</c:if></td>
+									<a href="${pageContext.request.contextPath}/board/delete?no=${vo.no}" class="del">
+										<font color="black">삭제</font>
+									</a>
+								</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>
+				
 				<div class="pager">
 					<ul>
-						<c:if test="${ index-1 != 0 }">
-							<li class="pg-prev"><a
-								href="${pageContext.request.contextPath}/board/viewpaging?index=${index-1}&search=${search}">◀
+						<c:if test="${startpage > 1 }">
+								<li class="pg-prev">
+								<a href="${pageContext.request.contextPath}/board/viewpaging?index=${startpage-1}&search=${search}">◀
 									이전</a></li>
-
 						</c:if>
-
-						<c:forEach begin="1" end="${size}" varStatus="status">
+						
+						<c:forEach begin="${startpage}" end="${ endpage}" varStatus="status" >
+						
 							<c:choose>
-								<c:when test="${size >= status.count}">
-									<li><a
-										href='${pageContext.request.contextPath}/board/viewpaging?index=${status.index}&search=${search}'>
-											<!-- Color To Paging Index --> <c:choose>
-												<c:when test="${ status.index eq param.index }">
-													<font color="red">${status.index}</font>
-												</c:when>
-												<c:when test="${ status.index eq index }">
-													<font color="red">${status.index}</font>
-												</c:when>
-												<c:otherwise>
-														${status.index}
-												</c:otherwise>
-											</c:choose>
-									</a></li>
+								<c:when test="${ status.index <= size }">
+									<li><a href='${pageContext.request.contextPath}/board/viewpaging?index=${status.index}&search=${search}'>
+										<c:choose>
+											<c:when test= "${status.index == index }">
+												<font color="red" >${status.index}</font>
+											</c:when>
+											<c:otherwise>
+												 <font color="black"> ${status.index}</font>
+											</c:otherwise>
+										</c:choose>
+									</a></li>			
 								</c:when>
 								<c:otherwise>
-									<!-- 게시물이 없는 페이지는 disable -->
 									<li class="disable">${status.index }</li>
 								</c:otherwise>
 							</c:choose>
-						</c:forEach>
-
-						<c:if test="${ index != size }">
-							<li class="pg-next"><a
-							href="${pageContext.request.contextPath}/board/viewpaging?index=${index+1}&search=${search}">다음
-								▶</a></li>
-						</c:if>
 						
+						</c:forEach>
+						<c:if test="${endpage < size }">
+									<li class="pg-next">
+									<a href="${pageContext.request.contextPath}/board/viewpaging?index=${endpage+1}&search=${search}">다음▶</a>
+									</li>
+						</c:if>
 					</ul>
 				</div>
 				<c:if test="${ not empty authUser }">

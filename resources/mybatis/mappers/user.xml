@@ -45,7 +45,7 @@
 
 	<select id="getUserByEmail" parameterType="String" resultType="UserVo">
 	<![CDATA[
-		select no, name, email, gender	
+		select no, name, email	
 		 from member 
 		 where email=#{email}
 	]]>
