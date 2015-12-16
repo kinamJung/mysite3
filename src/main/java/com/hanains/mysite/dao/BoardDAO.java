@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hanains.mysite.vo.BoardInfo;
 import com.hanains.mysite.vo.BoardVo;
+import com.hanains.mysite.vo.UploadFileVo;
 
 @Repository
 public class BoardDAO {
@@ -116,11 +117,32 @@ public class BoardDAO {
 
 
 	// insert
-	public void insert(BoardVo vo) {
+	public long insert(BoardVo vo) {
 
 		System.out.println(vo);
 		sqlSession.insert("board.insert", vo);
+		return vo.getNo();
 		
 	}
+	
+	public void insert(long boardNo, String fileName, String originFilename, String mineType){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("boardNo", boardNo);
+		map.put("fileName", fileName);
+		map.put("originFileName", originFilename);
+		map.put("mineType", mineType);
+		System.out.println(map);
+		sqlSession.insert("board.insertFile", map);
+		
+	}
+	
 
+	public List<UploadFileVo> getUploadFileListByBoardNo(long no){
+		
+		List<UploadFileVo> list = sqlSession.selectList("board.getUpdateFileByBoardNo", no);
+		return list;
+	}
+	
 }

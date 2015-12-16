@@ -16,6 +16,11 @@
   	
   	※ MEMBER 테이블과 BOARD 테이블간의 조인값을 처리하기 위한 BoardInfo 클래스 추가.
   	
+  	※파일 첨부 기능 추가로 인해 UploadFile table 추가.
+  	  -> upload_file.sql 폴더에 있는  테이블생성, 시퀀스 생성 쿼리문을 통해 테이블과 시퀀스 생성.
+
+  	※파일을 관리하기 위해 UploadFileVo 추가.
+  	
    							
    			
    							

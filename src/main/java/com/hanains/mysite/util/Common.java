@@ -15,4 +15,8 @@ public class Common {
 	public static final int UPLOAD_FILE_SIZE_LIMIT = 5 * 1024 * 1024;
 	public static final String ENC_TYPE = "UTF-8";
 	
+	
+	public static final String FILE_PATH = "/temp/";
+	public static final String FILE_MAPPING_URL = "/profile-images/";
+	
 }

@@ -4,9 +4,17 @@
 <mapper namespace="board">
 
 	<insert id="insert" parameterType="BoardVo">
+	
+		<selectKey keyProperty="no" resultType="long" order="BEFORE" >
+			select board_no_seq.nextval from dual
+		</selectKey> 
+		
 		<![CDATA[
-			insert into board values ( board_no_seq.nextval, #{title}, #{content}, #{memberNo}, 0, SYSDATE, #{orderNo}, #{groupNo}, #{depth} )
+			insert into board values ( #{no} , #{title}, #{content}, #{memberNo}, 0, SYSDATE, #{orderNo}, #{groupNo}, #{depth} )
 		]]>
+		
+		
+		
 	</insert>
 	
 	<select id="getGroupMaxValue" resultType="long" >
@@ -111,6 +119,23 @@
 
 	<select id="getBoardCount" resultType="int">
 		select count(*) as count from board
+	</select>
+
+	<insert id="insertFile" parameterType="map" >
+		
+		<![CDATA[
+		INSERT INTO UPLOAD_FILE 
+		VALUES (upload_file_no_seq.nextval, #{boardNo}, #{fileName}, #{originFileName}, #{mineType})
+		]]>
+		
+	</insert>
+
+	<select id="getUpdateFileByBoardNo" parameterType="long" resultType="UploadFileVo">
+		<![CDATA[
+			SELECT NO, FILE_NAME as fileName, ORIGIN_FILE_NAME as originFileName, MINE_TYPE as mineType 
+			from UPLOAD_FILE
+			WHERE BOARD_NO = #{no}
+		]]>
 	</select>
 
 

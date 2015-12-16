@@ -23,7 +23,7 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/write" >
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/write" enctype="multipart/form-data">
 					<input type="hidden" name="memberNo" value="${authUser.no}">
 					<input type="hidden" name="groupNo" value="${boardVo.groupNo}">
 					<input type="hidden" name="orderNo" value="${boardVo.orderNo }" >
@@ -39,7 +39,8 @@
 						</tr>
 						<tr>
 							<td class="label">첨부파일</td>
-							<td> <input type="file" name="uploadFile"> <font size="1"> 5MB제한</font> </td>
+							<td> <input type="file" name="uploadFile"> <font size="1"> 5MB제한</font><br>
+							 <input type="file" name="uploadFile"> </td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>
@@ -47,7 +48,7 @@
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath}/bs">취소</a> <input type="submit" value="등록">
+						<a href="${pageContext.request.contextPath}/board/">취소</a> <input type="submit" value="등록">
 					</div>
 				</form>
 			</div>

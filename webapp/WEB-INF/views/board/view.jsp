@@ -26,7 +26,16 @@
 						<td class="label">제목</td>
 						<td>${boardVo.title}</td>
 					</tr>
-
+					<tr>
+						<td class="label">첨부파일</td>
+						<td>
+							<c:forEach items="${uploadFileList}" var="file" varStatus="status">
+								
+								<a href="${pageContext.request.contextPath }${file.fileName}" > ${ file.originFileName } </a><br>
+							</c:forEach>
+						</td>
+					
+					</tr>
 					<tr>
 						<td class="label">내용</td>
 						<td>

@@ -51,8 +51,11 @@ public class UserDao {
 		return vo;
 	}
 	
+	public UserVo get(String email){
+		UserVo vo = sqlSession.selectOne("user.getUserByEmail",email);
+		return vo;
+	}
 	
-
 	public void insert( UserVo vo ) {
 		
 		sqlSession.insert("user.insert",vo);

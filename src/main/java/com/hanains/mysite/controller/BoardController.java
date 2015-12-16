@@ -1,7 +1,14 @@
 package com.hanains.mysite.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +23,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
+
+
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.hanains.mysite.service.BoardService;
+import com.hanains.mysite.util.Common;
 import com.hanains.mysite.vo.BoardInfo;
 import com.hanains.mysite.vo.BoardVo;
 import com.hanains.mysite.vo.GuestBookVo;
+import com.hanains.mysite.vo.UploadFileVo;
+import com.hanains.mysite.vo.UserVo;
 
 @Controller
 @RequestMapping("/board")
@@ -43,7 +58,12 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/writeForm")
-	public String writeForm(@ModelAttribute BoardVo vo, Model model){
+	public String writeForm(@ModelAttribute BoardVo vo, Model model, HttpSession session){
+		
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null){
+			return "redirect:/user/loginform";
+		}
 		
 		model.addAttribute("board", vo);
 		
@@ -51,17 +71,17 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/write")
-	public String write(@ModelAttribute BoardVo vo){
+	public String write(@ModelAttribute BoardVo vo,
+						@RequestParam( "uploadFile" ) MultipartFile multipartFile[]){
 		
-		System.out.println("write : " + vo);
-		
-		boardService.insert(vo);
+		boardService.insert(vo, multipartFile);
 		
 		return "redirect:/board/";
 	}
 	
 	
 	@RequestMapping("/view")
+	
 	public String boardView(@ModelAttribute BoardVo vo, Model model){
 		
 		System.out.println(vo);
@@ -69,11 +89,23 @@ public class BoardController {
 		boardService.updateView(vo);
 		
 		//select board vo
-		BoardVo board = boardService.view(vo);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = boardService.view(vo);
 		
+		BoardVo board = (BoardVo)map.get("board");
+		List<UploadFileVo> list = (List<UploadFileVo>)map.get("uploadFile");
+		
+		//파일 이름에 경로 추가. // view.jsp에 파일을 다운받게 하기 위해
+		for(UploadFileVo file : list){
+			file.setFileName( Common.FILE_MAPPING_URL + file.getFileName());		
+		}
+		
+		System.out.println("[info] Board Controller /view");
 		System.out.println(board);
+		System.out.println(list);
 		
 		model.addAttribute("boardVo", board);
+		model.addAttribute("uploadFileList", list);
 		return "/board/view";
 		
 	}
@@ -81,7 +113,11 @@ public class BoardController {
 	@RequestMapping("/modifyform")
 	public String modifyForm(@ModelAttribute BoardVo vo, Model model){
 		
-		BoardVo board = boardService.view(vo);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = boardService.view(vo);
+		
+		BoardVo board = (BoardVo)map.get("board");
+		
 		model.addAttribute("boardVo", board);
 		
 		return "/board/modify";
@@ -117,20 +153,7 @@ public class BoardController {
 		model = boardService.viewPaging(index, keyword, model);
 		return "/board/list";		
 	}
-	
-	
-	@RequestMapping("/commentInsert")
-	public String commentInsert(@ModelAttribute BoardVo vo, Model model){
-		
-		System.out.println(vo);
-		
-		boardService.insertComment(vo, model);
-	
-		
-		return "redirect:/board/";
-	}
-	
-	
+
 }
 
 
