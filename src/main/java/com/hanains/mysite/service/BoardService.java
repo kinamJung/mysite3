@@ -24,7 +24,7 @@ public class BoardService {
 	@Autowired
 	private BoardDAO dao;
 
-	private static final int BLOCK_SIZE = 5;
+
 
 	public Model list(Model model) {
 
@@ -41,13 +41,11 @@ public class BoardService {
 		model.addAttribute("list", list);
 		model.addAttribute("index", 1);
 
-		int endPage = (1 + BLOCK_SIZE) - 1;
+		int endPage = (1 + Common.PAGE_BLOCK_SIZE) - 1;
 		model.addAttribute("startpage", 1);
 		model.addAttribute("endpage", endPage);
 
-		System.out.println("[info]size: " + pagingSize);
-		System.out.println("[info]startpage:" + 1);
-		System.out.println("[info]endpage: " + endPage);
+		
 		return model;
 
 	}
@@ -63,7 +61,7 @@ public class BoardService {
 		Long no = 0L;
 
 		// 새글인 경우
-		if (vo.getGroupNo() == 0 && vo.getOrderNo() == 0 && vo.getDepth() == 0) {
+		if (vo.getGroupNo() == 0 ) {
 			long maxValue = 0;
 			int boardCount = dao.getBoardCount();
 			if (boardCount == 0) {
@@ -71,10 +69,10 @@ public class BoardService {
 			} else {
 				maxValue = dao.getGroupMaxValue();
 			}
-
+			// 새글의 GroupNo, orderNo, depth 세팅
 			vo.setGroupNo(maxValue + 1);
-			vo.setOrderNo(vo.getOrderNo() + 1);
-			vo.setDepth(vo.getDepth() + 1);
+			vo.setOrderNo(1L);
+			vo.setDepth(1L);
 
 			no = dao.insert(vo);
 		} else { // 코멘트인 경우
@@ -198,14 +196,14 @@ public class BoardService {
 		model.addAttribute("list", list);
 
 		// 해당 인덱스가 존재하는 처음페이지와 끝페이지를 구함.
-		int temp = (index / BLOCK_SIZE);
+		int temp = (index / Common.PAGE_BLOCK_SIZE);
 
-		if (index % (BLOCK_SIZE) == 0) {
+		if (index % (Common.PAGE_BLOCK_SIZE) == 0) {
 			temp = temp - 1;
 		}
 
-		int startPage = (temp * BLOCK_SIZE) + 1;
-		int endPage = startPage + BLOCK_SIZE - 1;
+		int startPage = (temp * Common.PAGE_BLOCK_SIZE) + 1;
+		int endPage = startPage + Common.PAGE_BLOCK_SIZE - 1;
 
 		model.addAttribute("startpage", startPage);
 		model.addAttribute("endpage", endPage);

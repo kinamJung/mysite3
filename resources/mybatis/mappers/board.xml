@@ -68,7 +68,7 @@
 		]]>
 	</update>
 
-	<select id="getBoardInfoByPaging" parameterType="map" resultType="BoardInfo">
+	<select id="getBoardList" parameterType="map" resultType="BoardInfo">
 		<![CDATA[
 				SELECT *
 		  			FROM (SELECT A.*, ROWNUM AS RNUM, COUNT (*) OVER () AS TOTCNT, COUNT (*) OVER () - ROWNUM +1 as articleSequence
@@ -83,33 +83,22 @@
 										 a.GROUP_NO as groupNo,
 										 a.DEPTH as depth
 		                    		FROM board a, MEMBER b
-		                   			WHERE a.member_no = b.no
-		                			ORDER BY a.group_no DESC, a.order_no asc) A)
-					 WHERE RNUM > #{start} AND RNUM <= #{end}		
-		]]>
-	</select>
-
-	<select id="getBoardListByFagingWithWord" parameterType="map" resultType="BoardInfo">
-		<![CDATA[
-				SELECT *
-		  			FROM (SELECT A.*, ROWNUM AS RNUM, COUNT (*) OVER () AS TOTCNT, COUNT (*) OVER () - ROWNUM +1 as articleSequence
-		          		  FROM (  SELECT a.NO as no,
-				                         a.TITLE as title,
-				                         a.CONTENT as content,
-				                         a.MEMBER_NO as memberNo,
-				                         b.NAME as name,
-				                         a.VIEW_CNT as viewCount,
-				                         a.REG_DATE as regDate,
-										 a.ORDER_NO as orderNo,
-										 a.GROUP_NO as groupNo,
-										 a.DEPTH as depth
-		                    		FROM board a, MEMBER b
-		                   			WHERE a.member_no = b.no AND (a.TITLE like #{word} OR a.content like #{word} OR b.name like #{word} )
+		                   			WHERE a.member_no = b.no 
+		                   			]]>
+		                   			<choose>
+		                   				<when test="word != ''">
+		                   					AND (a.TITLE like #{word} OR a.content like #{word} OR b.name like #{word} )
+		                   				</when>
+		                   			
+		                   			</choose>
+		                   			
+		                   			<![CDATA[		                   			
 		                			ORDER BY a.group_no DESC, a.order_no asc) A)
 					 WHERE RNUM > #{start} AND RNUM <= #{end}		
 		]]>
 	
 	</select>
+
 
 	<select id="selectBoardCountByLikeWord" parameterType="String" resultType="int">
 		<![CDATA[

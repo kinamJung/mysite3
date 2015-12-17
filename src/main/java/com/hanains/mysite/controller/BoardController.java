@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hanains.mysite.annotation.Auth;
+import com.hanains.mysite.annotation.AuthUser;
 import com.hanains.mysite.service.BoardService;
 import com.hanains.mysite.util.Common;
 import com.hanains.mysite.vo.BoardInfo;
@@ -57,13 +59,9 @@ public class BoardController {
 		return "redirect:/board/";
 	}
 	
+	@Auth
 	@RequestMapping("/writeForm")
-	public String writeForm(@ModelAttribute BoardVo vo, Model model, HttpSession session){
-		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null){
-			return "redirect:/user/loginform";
-		}
+	public String writeForm(@ModelAttribute BoardVo vo, Model model){
 		
 		model.addAttribute("board", vo);
 		
@@ -71,18 +69,23 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/write")
-	public String write(@ModelAttribute BoardVo vo,
+	public String write(@AuthUser UserVo authUser,
+						@ModelAttribute BoardVo vo,
 						@RequestParam( "uploadFile" ) MultipartFile multipartFile[]){
 		
+		vo.setMemberNo(authUser.getNo());
+	
 		boardService.insert(vo, multipartFile);
 		
 		return "redirect:/board/";
 	}
 	
 	
-	@RequestMapping("/view")
-	
-	public String boardView(@ModelAttribute BoardVo vo, Model model){
+	@RequestMapping("/view")	
+	public String boardView(@ModelAttribute BoardVo vo,
+							@RequestParam(value="search",required=true,defaultValue="")String search,
+							@RequestParam(value="index",required=true, defaultValue="1" )int index,
+							Model model){
 		
 		//update view Count
 		boardService.updateView(vo);
@@ -98,25 +101,20 @@ public class BoardController {
 		for(UploadFileVo file : list){
 			file.setFileName( Common.FILE_MAPPING_URL + file.getFileName());		
 		}
-		
-		System.out.println("[info] Board Controller /view");
-		System.out.println(board);
-		System.out.println(list);
-		
+	
+		model.addAttribute("search", search);
+		model.addAttribute("index", index);
 		model.addAttribute("boardVo", board);
 		model.addAttribute("uploadFileList", list);
 		return "/board/view";
 		
 	}
 	
+	@Auth
 	@RequestMapping("/modifyform")
-	public String modifyForm(@ModelAttribute BoardVo vo, Model model, HttpSession session){
+	public String modifyForm(@ModelAttribute BoardVo vo, Model model){
 		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null){
-			return "redirect:/user/loginform";
-		}
-		
+	
 		Map<String, Object> map = new HashMap<String, Object>();
 		map = boardService.view(vo);
 		
@@ -128,11 +126,11 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/update")
-	public String update(@ModelAttribute BoardVo vo, Model model){
+	public String update( @AuthUser UserVo authUser,
+						  @ModelAttribute BoardVo vo, Model model){
 		
+		vo.setMemberNo(authUser.getNo());
 		boardService.updateBoard(vo);
-		
-		System.out.println(vo);
 		
 		model.addAttribute("boardVo", vo);
 		return "/board/view";

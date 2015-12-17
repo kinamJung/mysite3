@@ -19,7 +19,6 @@
 			<div id="board">
 				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/update">
 				<input type="hidden" name="no" value="${boardVo.no}" >
-				<input type="hidden" name="memberNo" value="${boardVo.memberNo }" >
 				<input type="hidden" name="orderNo" value="${boardVo.orderNo}">
 				<input type="hidden" name="groupNo" value="${boardVo.groupNo}">
 				<input type="hidden" name="depth" value="${boardVo.depth}">

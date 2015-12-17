@@ -30,7 +30,6 @@
 						<td class="label">첨부파일</td>
 						<td>
 							<c:forEach items="${uploadFileList}" var="file" varStatus="status">
-								
 								<a href="${pageContext.request.contextPath }${file.fileName}" > ${ file.originFileName } </a><br>
 							</c:forEach>
 						</td>
@@ -42,16 +41,22 @@
 							<div class="view-content">
 							${fn:replace(boardVo.content,crlf,'<br/>')}
 							</div>
+							<c:forEach items="${uploadFileList}" var="file" varStatus="status">
+								<c:if test="${ file.mineType == 'jpg' || file.mineType == 'JPG' || file.mineType == 'png' || file.mineType == 'gif' }">
+									<img src="${pageContext.request.contextPath }${file.fileName}">
+								</c:if>
+								<br>
+							</c:forEach>
 						</td>
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath}/board/">글목록</a>
+					<a href="${pageContext.request.contextPath}/board/viewpaging?index=${index}&search=${search}">글목록</a>
 					<c:if test="${ not empty authUser }">
-						<a href="${pageContext.request.contextPath}/board/writeForm?no=${boardVo.no}&groupNo=${boardVo.groupNo}&orderNo=${boardVo.orderNo}&depth=${boardVo.depth}">답글달기</a>
+						<a href="${pageContext.request.contextPath}/board/writeForm?groupNo=${boardVo.groupNo}&orderNo=${boardVo.orderNo}&depth=${boardVo.depth}">답글달기</a>
 					</c:if>	
 					<c:if test="${authUser.no eq boardVo.memberNo }">
-						<a href="${pageContext.request.contextPath}/board/modifyform?no=${boardVo.no}&memberNo=${boardVo.memberNo}&groupNo=${boardVo.groupNo}&depth=${boardVo.depth}&orderNo=${boardVo.orderNo}">글수정</a>
+						<a href="${pageContext.request.contextPath}/board/modifyform?no=${boardVo.no}&groupNo=${boardVo.groupNo}&depth=${boardVo.depth}&orderNo=${boardVo.orderNo}">글수정</a>
 					</c:if>
 				</div>
 			</div>

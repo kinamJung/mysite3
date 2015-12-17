@@ -47,14 +47,12 @@ public class BoardDAO {
 	// Get Board_INFO Count
 	public int getBoardCount() {
 
-		int count = sqlSession.selectOne("board.getBoardCount");
-		
+		int count = sqlSession.selectOne("board.getBoardCount");		
 		return count;
 	}
 
 	public void updateBoard(BoardVo vo) {
 		sqlSession.update("board.update", vo);
-
 	}
 	
 	public Long getGroupMaxValue(){
@@ -68,7 +66,6 @@ public class BoardDAO {
 		sqlSession.delete("board.delete", vo);
 		
 	}
-
 
 	// Update Count
 	public void updateViewCount(BoardVo vo) {
@@ -95,7 +92,7 @@ public class BoardDAO {
 		map.put("start", (pagingCount - 1) * displayArticleCount);
 		map.put("end",pagingCount * displayArticleCount );
 		
-		List<BoardInfo> list = sqlSession.selectList("board.getBoardListByFagingWithWord", map);
+		List<BoardInfo> list = sqlSession.selectList("board.getBoardList", map);
 		
 		return list;
 
@@ -105,21 +102,20 @@ public class BoardDAO {
 	public List<BoardInfo> getListByFaging(int pagingCount,
 			int displayArticleCount) {
 
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("word", "");
 		map.put("start",(pagingCount - 1) * displayArticleCount );
 		map.put("end",pagingCount * displayArticleCount );
 		
-		List<BoardInfo> list =  sqlSession.selectList("board.getBoardInfoByPaging", map);
-		
-		
+		List<BoardInfo> list =  sqlSession.selectList("board.getBoardList", map);
+				
 		return list;
 	}
 
 
 	// insert
 	public long insert(BoardVo vo) {
-
-		System.out.println(vo);
+		
 		sqlSession.insert("board.insert", vo);
 		return vo.getNo();
 		
@@ -133,7 +129,7 @@ public class BoardDAO {
 		map.put("fileName", fileName);
 		map.put("originFileName", originFilename);
 		map.put("mineType", mineType);
-		System.out.println(map);
+		
 		sqlSession.insert("board.insertFile", map);
 		
 	}

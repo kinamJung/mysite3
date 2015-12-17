@@ -10,6 +10,9 @@
 	UserVo authUser = (UserVo) session.getAttribute("authUser");
 %>
 
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +20,9 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.request.contextPath}/assets/css/board.css" rel="stylesheet"
 	type="text/css">
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
+
 </head>
 <body>
 	<div id="container">
@@ -46,7 +52,7 @@
 								<c:if test="${vo.depth > 1 }">
 									<img src="${pageContext.request.contextPath }/assets/images/ico-reply.gif">
 								</c:if>							
-								<a href="${pageContext.request.contextPath}/board/view?no=${vo.no}">${vo.title}</a>
+								<a href="${pageContext.request.contextPath}/board/view?no=${vo.no}&search=${search}&index=${index}">${vo.title}</a>
 							</td>
 							<td>${vo.name}</td>
 							<td>${vo.viewCount}</td>
@@ -99,7 +105,7 @@
 				</div>
 				<c:if test="${ not empty authUser }">
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath}/board/writeForm?no=${authUser.no}&groupNo=0&orderNo=0&depth=0" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/writeForm?groupNo=0" id="new-book">글쓰기</a>
 					</div>
 				</c:if>
 
