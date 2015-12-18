@@ -26,8 +26,6 @@ public class BoardDAO {
 		
 		return count;
 	}
-
-	
 	
 	//Get OrderMaxNo By GroupNo
 	public long getOrderMaxNoByGroupNo(long no){

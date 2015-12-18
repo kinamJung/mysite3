@@ -19,3 +19,5 @@ CREATE SEQUENCE member_no_seq
  MAXVALUE       99999999
  NOCACHE
  NOCYCLE;
+ 
+ commit;

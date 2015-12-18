@@ -73,7 +73,9 @@ public class BoardService {
 			vo.setGroupNo(maxValue + 1);
 			vo.setOrderNo(1L);
 			vo.setDepth(1L);
-
+			
+			System.out.println(vo);
+			
 			no = dao.insert(vo);
 		} else { // 코멘트인 경우
 

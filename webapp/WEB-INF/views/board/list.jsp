@@ -10,9 +10,6 @@
 	UserVo authUser = (UserVo) session.getAttribute("authUser");
 %>
 
-
-
-
 <!DOCTYPE html>
 <html>
 <head>

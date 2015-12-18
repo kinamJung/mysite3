@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,15 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-
-
-
-
-
-
-
-
 
 
 
@@ -44,6 +37,8 @@ public class BoardController {
 
 	@Autowired
 	BoardService boardService;
+	
+	private static final Log LOG = LogFactory.getLog( BoardController.class );
 	
 	@RequestMapping("/")
 	public String list(Model model){
@@ -86,6 +81,8 @@ public class BoardController {
 							@RequestParam(value="search",required=true,defaultValue="")String search,
 							@RequestParam(value="index",required=true, defaultValue="1" )int index,
 							Model model){
+		
+		LOG.info("BoardController.boardView");
 		
 		//update view Count
 		boardService.updateView(vo);
@@ -141,6 +138,8 @@ public class BoardController {
 							
 							@RequestParam(value="search", required=true, defaultValue="")String keyword,
 							Model model){
+		LOG.info("BoardController.viewPaging");
+		
 		model = boardService.viewPaging(index, keyword, model);
 		return "/board/list";		
 	}

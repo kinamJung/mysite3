@@ -10,7 +10,7 @@
 		</selectKey> 
 		
 		<![CDATA[
-			insert into board values ( #{no} , #{title}, #{content}, #{memberNo}, 0, SYSDATE, #{orderNo}, #{groupNo}, #{depth} )
+			insert into board values ( #{no} , #{title}, #{content}, #{memberNo}, 0, SYSDATE, #{groupNo}, #{orderNo}, #{depth} )
 		]]>
 		
 		

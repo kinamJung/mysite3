@@ -1,4 +1,7 @@
-CREATE TABLE WEBDB.UPLOAD_FILE
+drop table UPLOAD_FILE;
+drop sequence upload_file_no_seq;
+
+CREATE TABLE UPLOAD_FILE
 (
    NO                 NUMBER (10, 2) NOT NULL,
    BOARD_NO           NUMBER (10, 2) NOT NULL,
@@ -14,13 +17,6 @@ CREATE SEQUENCE upload_file_no_seq
  MAXVALUE       99999999
  NOCACHE
  NOCYCLE;
- 
 
 
--- insert
-INSERT INTO UPLOAD_FILE VALUES (upload_file_no_seq.nextval, 3, '123345.jpg', 'abcd.jpg','jpg');
-
--- select
-SELECT NO, FILE_NAME as fileName, ORIGIN_FILE_NAME as originFileName, MINE_TYPE as mineType 
-from UPLOAD_FILE
-WHERE BOARD_NO = 145;
+commit;
